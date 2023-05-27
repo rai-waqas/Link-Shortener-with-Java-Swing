@@ -1,6 +1,5 @@
 package myPackage;
 import java.awt.*;
-import static java.awt.SystemColor.text;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
 import java.awt.font.TextAttribute;
@@ -28,7 +27,7 @@ public class GUI extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         shortUrlLabel = new javax.swing.JLabel();
         name = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        copyUrlButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setLocationByPlatform(true);
@@ -84,11 +83,11 @@ public class GUI extends javax.swing.JFrame {
         name.setForeground(new java.awt.Color(255, 255, 255));
         name.setText("Link Shortener");
 
-        jButton1.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
-        jButton1.setText("Copy URL");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        copyUrlButton.setFont(new java.awt.Font("Segoe UI", 3, 14)); // NOI18N
+        copyUrlButton.setText("Copy URL");
+        copyUrlButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                copyUrlButtonActionPerformed(evt);
             }
         });
 
@@ -120,7 +119,7 @@ public class GUI extends javax.swing.JFrame {
                 .addGap(93, 93, 93))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(350, 350, 350)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(copyUrlButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -142,7 +141,7 @@ public class GUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(shortUrlLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(36, 36, 36)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(copyUrlButton, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(44, 44, 44))
         );
 
@@ -162,19 +161,18 @@ public class GUI extends javax.swing.JFrame {
 
     private void shortUrlButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_shortUrlButtonActionPerformed
         String originalUrl = originalUrlField.getText();
-            if(originalUrl.isEmpty() || !originalUrl.matches("https://www\\.[A-Za-z0-9]+\\.com.*")){
+            if(originalUrl.matches("https://www\\.[A-Za-z0-9]+\\.com.*") || originalUrl.matches("https://[A-Za-z0-9]+\\.com.*")){
+                String shortUrl = ls.shortenUrl(originalUrl);
+                shortUrlLabel.setText(shortUrl);
+            }
+            else if(originalUrl.isEmpty() ){
+                JOptionPane.showMessageDialog(null,"URL Empty, Please enter a valid URL");
+                shortUrlLabel.setText("");
+            }
+            else{
                 JOptionPane.showMessageDialog(null,"Invalid URL, Please enter a valid URL");
                 originalUrlField.setText("");
                 shortUrlLabel.setText("");
-            }
-//            else if(LinkShortener.urlMap.containsValue(originalUrl)){
-//                JOptionPane.showMessageDialog(null,"Given URL is already present, try a different URL");
-//                originalUrlField.setText("");
-//                shortUrlLabel.setText("");
-//            }
-            else{
-            String shortUrl = ls.shortenUrl(originalUrl);
-            shortUrlLabel.setText(shortUrl);
             }
     }//GEN-LAST:event_shortUrlButtonActionPerformed
 
@@ -204,13 +202,13 @@ public class GUI extends javax.swing.JFrame {
         shortUrlLabel.setFont(font.deriveFont(attributes));
     }//GEN-LAST:event_shortUrlLabelMouseEntered
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void copyUrlButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_copyUrlButtonActionPerformed
         String shortUrl = shortUrlLabel.getText();
         StringSelection selection = new StringSelection(shortUrl);
         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
         clipboard.setContents(selection, null);
         JOptionPane.showMessageDialog(null,"URL successfully copied to clipboard");
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_copyUrlButtonActionPerformed
 
     public static void main(String args[]) {
         
@@ -223,7 +221,7 @@ public class GUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton copyUrlButton;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;

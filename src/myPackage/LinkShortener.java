@@ -9,7 +9,7 @@ public class LinkShortener {
     private final String domain;
 
     public LinkShortener(String domain) {
-        this.urlMap = new HashMap<>();
+        urlMap = new HashMap<>();
         this.rand = new Random();
         this.domain = domain;
     }
